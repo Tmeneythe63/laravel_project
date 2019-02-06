@@ -3,13 +3,17 @@
 
 quelque etape pour la comfigration :
 
-    1- cree une base de donnee (lab_share_db) de tupe mysql 
-    2- execute  la commande (php artisan migrate) pour cree les tables de base de donnee
-    3- execute la commande  (php artisan db:seed) pour crree l utilisateur admin par defaut 
+    1- cree une base de donnee (lab_share_db) de tupe mysql
+        - il faut que le nom d'utilisateur du mysql soit "root" et mot de pass soit ""
+         -- si non changer le dans le file .env selon votre nom d'utilisateur et mot de pass du mysql
+    2- si le file .env n'exist pas dans le projet changer le nom de  file .env.example a .env
+    3- execute  la commande (php artisan migrate) pour cree les tables de base de donnee
+    4- execute la commande  (php artisan db:seed) pour crree l'utilisateur admin par defaut 
             - username : admin@gmail.com
             - userpass : admin
-    4- execute la commande  (php artisan serve) pour execut la serveur
-              et tapper ligne suit vent au browser <http://127.0.0.1:8000>
+    5- execute la commande  (php artisan serve) pour execut la serveur
+              et tapper le ligne suitvant au browser <http://127.0.0.1:8000>
+        
 
 
 
