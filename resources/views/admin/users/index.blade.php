@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
 <div class="container">
@@ -37,7 +37,7 @@
                   @endforeach
                 </table>
             </div> 
-            
+            {{ $users->links() }}
                 
             
             

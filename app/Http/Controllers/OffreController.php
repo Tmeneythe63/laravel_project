@@ -22,7 +22,7 @@ class OffreController extends Controller
     }
     public function index()
     {
-        $offres=Offre::all();
+        $offres=Offre::paginate(6);
         
         return view("offre.index",['offres' => $offres]);
     }
@@ -194,7 +194,7 @@ class OffreController extends Controller
     public function showoffre($userid)
     {
          // $offrespulisher = DB::select('select * from offres where user_id = ?', [$userid]);
-         $offrespulisher = Offre::all()->where('user_id',$userid); 
+         $offrespulisher = Offre::where('user_id',$userid)->paginate(5); 
          
          
          

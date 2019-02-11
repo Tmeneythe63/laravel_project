@@ -37,6 +37,7 @@ Route::get('/offres/confirmresponseechange{respid}', 'OffreController@confirmres
 
 //
 Route::resource('/produit', 'ProduitController');
+Route::resource('/categories', 'CategoryController');
 Route::resource('/users', 'UserController');
 Route::resource('/magasins', 'MagasinController');
 Route::resource('/labos', 'LaboController');

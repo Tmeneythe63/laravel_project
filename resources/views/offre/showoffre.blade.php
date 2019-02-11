@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
 <div class="container">
@@ -52,8 +52,14 @@
                     {{$off->description}}
                     {{$off->typeOffre}}
                     {{$off->typeEnonce}}
+                    <hr>
+                    <a href="{{route('offre.showoffredetails',$off->id)}}" class="btn btn-info">Consulter</a>
+                    <form action="/offre/{{$off->id}}" method="POST">
+                    {{csrf_field()}}
                     
-                    <a href="{{route('offre.showoffredetails',$off->id)}}">Consulter</a>
+                    {{method_field('DELETE')}}
+                    <button type="submit" class="btn btn-danger"><i class="fa fa-remove"></i> Delete</button>
+                    </form>
                    </div>
                   
                     
@@ -63,7 +69,7 @@
         @endforeach
         </div>
 
-
+    {{$offrespulisher->links()}}
 
 
  </div>

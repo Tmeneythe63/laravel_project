@@ -11,10 +11,14 @@ class Produit extends Model
         'formuleChimique',
         'unite',
         'dateExp',
-        'user_id'
+        'user_id',
+        'category_id'
       ];
 
-      
+      public function category()
+      {
+          return $this->belongsTo('App\Category');
+      }
 
       public function magasins()
       {

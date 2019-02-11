@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
 <div class="container">
@@ -51,26 +51,23 @@
                     <div>
                     <img src="{{asset($offre->image)}}" width="150px" heigth="150px"/>
                     </div>
-                    {{$offre->id}}
-                    {{$offre->quantite}}
-                    {{$offre->typeOffre}}
-                    {{$offre->typeEnonce}}
-
-                    <a href="{{route('offre.reponse',$offre->id)}}"> Reponse</a>
-                    <form action="/offre/{{$offre->id}}" method="POST">
-                    {{csrf_field()}}
+                    <b>Id :</b>{{$offre->id}}<br>
+                    <b>Quanrite :</b>{{$offre->quantite}}<br>
+                    <b>TypeOffre :</b>{{$offre->typeOffre}}<br>
+                    <b>TypeEnonce :</b>{{$offre->typeEnonce}}<br>
+                    <b>Description :</b>{{$offre->description}}
+                        <hr>
+                    <a href="{{route('offre.reponse',$offre->id)}}" class="btn btn-info"> Reponse</a>
                     
-                    {{method_field('DELETE')}}
-                    <button type="submit">Delete</button>
-                    </form>
                 </div>
              </div>
             </div>
             @endforeach
             
             
-
+            
         </div>
+        {{ $offres->links() }}
     
     
 

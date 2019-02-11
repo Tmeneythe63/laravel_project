@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
 <div class="container">
@@ -57,6 +57,19 @@
                 <input type="date" class="form-control" name="dateExp" id="dateExp" placeholder="Enter DateExp">
             </div>
         </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="category_id">Category:</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="category_id" id="category_id">
+                @foreach($categories as $category)
+                <option value="{{$category->id}}">{{$category->categoryName}}</option>
+                @endforeach
+                </select>
+            </div>
+        </div>
+
+
         <div class="form-group">
             <div class="col-sm-10">
                 <input type="hidden" value="{{Auth::user()->id}}"  name="user_id" class="form-control" >

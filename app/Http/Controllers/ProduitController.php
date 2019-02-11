@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Produit;
+use App\Category;
 use App\Labo;
 use App\Magasin;
 use App\Magasin_produit;
@@ -30,7 +31,7 @@ class ProduitController extends Controller
         }
     
         //dd($laboID->id);
-       $produits=Magasin::where('labo_id',$laboID->id)->first()->produits;     
+       $produits=Magasin::where('labo_id',$laboID->id)->first()->produits()->paginate(5);     
         
 //$produits=Produit::where('user_id',Auth::user()->id)->magasins; 
       // $produits=Produit::all();
@@ -57,7 +58,8 @@ class ProduitController extends Controller
 
         return view("produit.create")
                     ->with('magasinID',$magasinID)
-                    ->with('produitID',$produitID);
+                    ->with('produitID',$produitID)
+                    ->with('categories',Category::all());
     }
 
     /**
@@ -75,7 +77,8 @@ class ProduitController extends Controller
             'unite' => 'required',
             'dateExp' => 'required|date',            
             'quantite' =>'required',
-            'user_id' =>'required'
+            'user_id' =>'required',
+            'category_id'=>'required'
             
             
       ]);
@@ -85,7 +88,8 @@ class ProduitController extends Controller
         'formuleChimique'=>$request->input('formuleChimique'),
         'unite' =>$request->input('unite'),
         'dateExp' =>$request->input('dateExp'),
-        'user_id' =>$request->input('user_id')
+        'user_id' =>$request->input('user_id'),
+        'category_id' =>$request->input('category_id')
        
       ]);
       
@@ -137,7 +141,8 @@ class ProduitController extends Controller
         
         return view("produit.edit")
                             ->with('produit' , $produit)
-                            ->with('magasinID',$magasinID);
+                            ->with('magasinID',$magasinID)
+                            ->with('categories',Category::all());
     }
 
     /**
@@ -155,7 +160,8 @@ class ProduitController extends Controller
             'formuleChimique' => 'required',
             'unite'           => 'required',
             'dateExp'         => 'required',
-            'quantite'        => 'required'
+            'quantite'        => 'required',
+            'category_id'     => 'required'
             
       ]);
     
@@ -164,6 +170,7 @@ class ProduitController extends Controller
           $produit->formuleChimique = $request->input('formuleChimique');
           $produit->unite = $request->input('unite');
           $produit->dateExp = $request->input('dateExp');
+          $produit->category_id = $request->input('category_id');
          
           
           $produit->save();

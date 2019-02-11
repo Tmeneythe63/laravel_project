@@ -20,7 +20,7 @@ class MagasinController extends Controller
     }
     public function index()
     {
-        $magasins=Magasin::all();
+        $magasins=Magasin::paginate(5);
         return view("admin.magasins.index",['magasins' => $magasins]);
     }
 

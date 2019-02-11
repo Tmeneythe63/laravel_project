@@ -19,7 +19,7 @@ class LaboController extends Controller
     }
     public function index()
     {
-        $labos=Labo::all();
+        $labos=Labo::paginate(5);
         return view("admin.labos.index",['labos' => $labos]);
     }
 

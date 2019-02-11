@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
 <div class="container">
@@ -53,7 +53,8 @@
                         <td>Formule Chimique</td>
                         <td>Quantite</td>
                         <td>Unite</td>
-                        
+                        <td>Category</td>
+
                         <td>Action</td>
                   </tr>
                   @foreach($produits as $produit)
@@ -63,6 +64,7 @@
                             <td>{{$produit->formuleChimique}}</td>
                             <td>{{$produit->pivot->quantite}}</td>
                             <td>{{$produit->unite}}</td>
+                            <td>{{$produit->category->categoryName}}</td>
                             
                             <td>
                                 <a href="{{route('produit.edit',$produit->id)}}">Edit</a>
@@ -89,7 +91,7 @@
 
         </div>
     
-    
+    {{ $produits->links() }}
 
 
 </div>
