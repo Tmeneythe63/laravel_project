@@ -1,6 +1,15 @@
 @extends('layouts.master')
 
 @section('content')
+<!-- Content Header (Page header) -->
+<section class="content-header">
+      <h1>
+        Labos / Creation 
+        
+      </h1>
+      
+</section>
+<br>
 <div class="container">
 
 <div class="row">

@@ -1,8 +1,19 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container">
 
+<!-- Content Header (Page header) -->
+<section class="content-header">
+      <h1>
+        Magasin
+        
+      </h1>
+      
+</section>
+<br>
+<div class="container">
+<div class="panel panel-default">
+          <div class="panel-body">
 
         <div class="row">
             <a  href="{{route('produit.create')}}" class="btn btn-primary col-sm-offset-10 col-sm-2">Ajouter Un Produit</a>            
@@ -10,36 +21,41 @@
         <hr>
         
         <div class="row">
+          <form class="form-horizontal" role="form" action="{{route('produit.index')}}" method="GET">
         
             <div class="col-sm-6">
-                <input type="text" class="form-control" id="quantite" placeholder="ref ,Nom...">
+                <input type="text" class="form-control" name="search" value="" placeholder="Formule Chimique">
             </div>
        
         
             <div class="col-sm-2">
-                <select class="form-control" >
-                    <option>1</option>
-                    <option>2</option>
-                    
+                <select class="form-control" name="searchCategory" >
+                <option ></option>
+                @foreach($categories as $category)
+                <option value="{{$category->id}}">{{$category->categoryName}}</option>
+                @endforeach
                 </select>
             </div>
        
 
             <div class="col-sm-2">
                 
-                <select class="form-control" id="refProduit">
-                    <option>Type Enoncer</option>
-                    <option>2</option>
+                <select class="form-control" name="searchProduitName">
+                @foreach($all_produits as $all_produit)
+                <option value="{{$all_produit->id}}">{{$all_produit->produitName}}</option>
+                @endforeach
                     
                 </select>
             </div>
         
         
             <div class="col-sm-2">
-               <button class="btn btn-default">Chercher</button>
+             
+               <button type="submit" class="btn btn-default">Chercher</button>
+             
             </div>
         
-
+            </form>
         </div>
         <hr>
         <br>
@@ -68,7 +84,8 @@
                             
                             <td>
                                 <a href="{{route('produit.edit',$produit->id)}}">Edit</a>
-                               
+                            </td>
+                            <td>
                                 <form action="{{route('produit.destroy',$produit->id)}}" method="post">
                                 {{csrf_field()}}
                                 {{method_field('DELETE')}}
@@ -91,8 +108,9 @@
 
         </div>
     
-    {{ $produits->links() }}
-
+    {{ $produits->appends(request()->query())->links()  }}
+</div>
+</div>
 
 </div>
 @endsection

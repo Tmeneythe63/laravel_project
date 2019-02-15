@@ -1,10 +1,20 @@
 @extends('layouts.master')
 
 @section('content')
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+      <h1>
+        Magasin / Modiffier un Produit
+        
+      </h1>
+      
+</section>
+<br>
 <div class="container">
 <div class="row">
     <div class="panel panel-default">
-    <div class="panel-heading">Creation  de Offre</div>
+    
     <div class="panel-body">
     @if ($errors->any())
       <div class="alert alert-danger">

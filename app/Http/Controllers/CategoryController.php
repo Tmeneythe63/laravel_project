@@ -42,7 +42,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'categoryName' => 'required'
+            'categoryName' => 'required|max:255|unique:categories'
         
       ]);
       $category = new Category([
@@ -52,6 +52,8 @@ class CategoryController extends Controller
       ]);
       
       $category->save();
+      return redirect()->route("categories.index")->with('success', 'category has been added');
+
     }
 
     /**
@@ -88,7 +90,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'categoryName' => 'required'
+            'categoryName' => 'required|max:255|unique:categories'
             
       ]);
     
@@ -98,7 +100,7 @@ class CategoryController extends Controller
                  
           $category->save();
                    
-         redirect('/categories')->with('success', 'category has been updated');
+          return redirect()->route("categories.index")->with('success', 'category has been updated');
     }
 
     /**
@@ -111,8 +113,8 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
         $category->delete();
-
-      redirect('/categories')->with('success', 'category has been deleted Successfully');
+        
+        return redirect()->route("categories.index")->with('success', 'category has been deleted Successfully');
      
     }
 }

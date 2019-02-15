@@ -1,6 +1,16 @@
 @extends('layouts.master')
 
 @section('content')
+<!-- Content Header (Page header) -->
+<section class="content-header">
+      <h1>
+        Mes Annonces 
+        
+      </h1>
+      
+</section>
+<br>
+
 <div class="container">
 
     
@@ -8,33 +18,44 @@
         <div class="row">
         
         
-            <div class="col-sm-6">
-                <input type="text" class="form-control" id="quantite" placeholder="ref ,Nom...">
-            </div>
-       
-        
-            <div class="col-sm-2">
-                <select class="form-control" >
-                    <option>Category</option>
-                    <option>2</option>
-                    
-                </select>
-            </div>
-       
+        <form class="form-horizontal" role="form" action="{{route('offre.showoffre',Auth::user()->id)}}" method="GET">
+            
+            
+        <div class="col-sm-3">
+        <select class="form-control" name="searchProduit" >
+        <option></option>
+        @foreach($produits as $produit)
+        <option value="{{$produit->id}}">{{$produit->produitName}}</option>
+        @endforeach
+        </select>
+    </div>
 
-            <div class="col-sm-2">
-                
-                <select class="form-control" id="refProduit">
-                    <option>Type Enoncer</option>
-                    <option>2</option>
-                    
-                </select>
-            </div>
+    <div class="col-sm-3">
+        <select class="form-control" name="searchTypeOffre" >
+        <option></option>
+            <option>Offre</option>
+            <option>Demande</option>
+            
+        </select>
+    </div>
+
+
+    <div class="col-sm-3">
         
-        
-            <div class="col-sm-2">
-               <button class="btn btn-default">Chercher</button>
-            </div>
+        <select class="form-control" name="searchTypeEnonce" >
+                <option></option>
+                <option>Changement</option>
+                <option>Don</option>
+            
+        </select>
+    </div>
+
+
+    <div class="col-sm-3">
+       <button type="submit" class="btn btn-default">Chercher</button>
+    </div>
+
+    </form>
         
 
         </div>
@@ -47,19 +68,21 @@
                <div class="panel-body">
                     <img src="{{asset($off->image)}}" width="100px" heigth="100px"/>
                    <div>
-                   {{$off->id}} 
-                    {{$off->quantite}}
-                    {{$off->description}}
-                    {{$off->typeOffre}}
-                    {{$off->typeEnonce}}
-                    <hr>
-                    <a href="{{route('offre.showoffredetails',$off->id)}}" class="btn btn-info">Consulter</a>
-                    <form action="/offre/{{$off->id}}" method="POST">
-                    {{csrf_field()}}
-                    
-                    {{method_field('DELETE')}}
-                    <button type="submit" class="btn btn-danger"><i class="fa fa-remove"></i> Delete</button>
-                    </form>
+                           {{$off->id}} 
+                            {{$off->quantite}}
+                            {{$off->description}}
+                            {{$off->typeOffre}}
+                            {{$off->typeEnonce}}
+                            <div class="pull-right ">
+                                <a href="{{route('offre.showoffredetails',$off->id)}}" class="btn btn-info">Consulter</a>
+                                
+                                <form action="/offre/{{$off->id}}" method="POST">
+                                {{csrf_field()}}
+                                
+                                {{method_field('DELETE')}}
+                                <button type="submit" class="btn btn-danger"><i class="fa fa-remove"></i> Delete</button>
+                                </form>
+                            </div>
                    </div>
                   
                     
@@ -69,7 +92,7 @@
         @endforeach
         </div>
 
-    {{$offrespulisher->links()}}
+    {{$offrespulisher->appends(request()->query())->links()}}
 
 
  </div>

@@ -16,7 +16,7 @@ class CreateLabosTable extends Migration
         Schema::create('labos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('laboName');
-
+            $table->boolean('hasmagasin')->default(0);
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
 

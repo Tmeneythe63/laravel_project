@@ -110,18 +110,18 @@ desired effect
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="{{asset('dist/img/user2-160x160.jpg')}}" class="user-image" alt="User Image">
+              <img src="{{asset(Auth::user()->profile->avatar)}}" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               <span class="hidden-xs">{{Auth::user()->name}}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="{{asset('dist/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
+                <img src="{{asset(Auth::user()->profile->avatar)}}" class="img-circle" alt="User Image">
 
                 <p>
-                {{Auth::user()->name}} - utilisateur
-                  <small>{{Auth::user()->emal}}</small>
+                {{Auth::user()->name}} - @if(Auth::user()->admin) Admin du System @else Utilisateur @endif
+                  <small>{{Auth::user()->profile->about}}</small>
                 </p>
               </li>
               <!-- Menu Body -->
@@ -148,7 +148,7 @@ desired effect
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat"><i class="fa fa-user"></i> Profile</a>
+                  <a href="{{ route('profile.index') }}" class="btn btn-default btn-flat"><i class="fa fa-user"></i> Profile</a>
                 </div>
                 <div class="pull-right">
                   
@@ -193,8 +193,8 @@ desired effect
             @if(Auth::user()->admin)
             
                 <!-- Optionally, you can add icons to the links -->
-                <li class="active"><a href="/home"><i class="fa fa-tachometer "></i> <span>Dashbord</span></a></li>
-                <li class="active"><a href="/users"><i class="fa fa-users"></i> <span>Users</span></a></li>
+                <li class=""><a href="/home"><i class="fa fa-tachometer "></i> <span>Dashbord</span></a></li>
+                <li class=""><a href="/users"><i class="fa fa-users"></i> <span>Users</span></a></li>
 
 
                 <li class="treeview">
@@ -237,7 +237,7 @@ desired effect
 
             @else
               @if(Auth::user()->aproved)
-              <li class="active"><a href="/offre"><i class="fa fa-users"></i> <span>Tous Les Offres</span></a></li>
+              <li class=""><a href="/offre"><i class="fa fa-users"></i> <span>Tous Les Offres</span></a></li>
                 
                 <li class="treeview">
                 <a href="#"><i class="fa fa-bullhorn "></i> <span>Mes Offres</span>
@@ -278,13 +278,10 @@ desired effect
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Tableau de bord
-        <small>Optional description</small>
-      </h1>
-      
-    </section>
+    
+
+
+    
 
     <!-- Main content -->
     <section class="content container-fluid">

@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Labo;
 use App\User;
 use Auth;
 
-class UserController extends Controller
+class ProfileController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,9 +20,9 @@ class UserController extends Controller
     }
     public function index()
     {
-       // $users=User::where('user_id','!=',Auth::user()->id)->get(); 
-        $users=User::where("admin",false)->paginate(5);
-        return view("admin.users.index",['users' => $users]);
+        
+        return view('profiles.profile')->with('user',Auth::user());
+        
     }
 
     /**
@@ -31,7 +32,7 @@ class UserController extends Controller
      */
     public function create()
     {
-       // return view("admin.users.create");
+       // return view("profiles.create");
     }
 
     /**
@@ -41,20 +42,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {     
-       /*  $request->validate([
-            'name' => 'required',
-            'email' => 'required|email'
-        
-      ]);
-      $user = new User([
-        
-        'name' =>$request->input('name'),
-        'email'=>$request->input('email')
-       
-      ]);
+    {
       
-      $user->save(); */
     }
 
     /**
@@ -76,20 +65,6 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        /* $user=User::find($id);
-        
-        return view("admin.users.edit")->with('user' , $user); */
-    }
-    public function aprove($id)
-    {
-         $user = User::find($id);
-          $user->aproved = true;
-          
-                 
-          $user->save();
-                   
-          return redirect()->route("users.index")->with('success', 'Utilisateur has been Aproved');
-        
         
     }
 
@@ -100,10 +75,33 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $request->validate([
+            'avatar' => '',
+            'about'  => 'required|max:255'
         
-    
+      ]);
+      $user = Auth::user();
+     
+      if($request->hasFile('avatar')){
+
+        $avatar = $request->file('avatar');
+        $image_new_name = time().$avatar->getClientOriginalName();
+        $avatar->move('uploads/avatar',$image_new_name);
+        $user->profile->avatar = 'uploads/avatar/'.$image_new_name;
+       
+        $user->profile->save();
+      }
+      $user->profile->about=$request->about;
+
+      $user->profile->save();
+      
+      
+      
+     
+      return redirect()->back();
+
     
     }
 
@@ -115,11 +113,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-       
-        $user = User::find($id);
-        $user->delete();
 
-        return redirect()->route("users.index")->with('success', 'Utilisateur has been deleted Successfully');
-      
     }
 }

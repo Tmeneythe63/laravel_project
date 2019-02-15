@@ -22,21 +22,36 @@ class ProduitController extends Controller
     {
         $this->middleware('auth');
     }
-    public function index()
+    public function index(Request $request)
     {
-       $laboID = DB::table('labos')->where('user_id',Auth::user()->id)->first();;
+       $laboID = DB::table('labos')->where('user_id',Auth::user()->id)
+                                        ->where('hasmagasin',true)->first();;
      // $magasinID= DB::table('magasins')->where('labo_id',$laboID->id)->first();;
+     
         if($laboID==null){
-            dd(" votre enregistrement n est pas comple");
+            dd(" votre enregistrement n est pas comple ");
         }
-    
-        //dd($laboID->id);
-       $produits=Magasin::where('labo_id',$laboID->id)->first()->produits()->paginate(5);     
         
-//$produits=Produit::where('user_id',Auth::user()->id)->magasins; 
-      // $produits=Produit::all();
+        
+      // $produits=Magasin::where('labo_id',$laboID->id)->first()->produits()->paginate(5);     
+       $all_produits=Produit::where('user_id',Auth::user()->id)->get();
+       
+        $produits=Magasin::where('labo_id',$laboID->id)->first()->produits()
+                            ->when($request->searchProduitName,function($query1) use ($request){
+                                return $query1->where('produitName','like','%'.$request->searchProduitName. '%' );
+                              })
+                            ->when($request->searchCategory,function($query2) use ($request){
+                                return $query2->where('category_id','like','%'.$request->searchCategory. '%' );
+                              })
+                            ->when($request->search,function($query3) use ($request){
+                                return $query3->where('formuleChimique','like','%'.$request->search. '%' );
+                              })->paginate(2); 
+        
+    // $produits=Magasin::where('labo_id',$laboID->id)->first()->produits();
+            
+
       
-       return view("produit.index",['produits' => $produits]);
+       return view("produit.index",['produits' => $produits,'all_produits'=>$all_produits,'categories' => Category::all()]);
     }
 
     /**
@@ -50,8 +65,12 @@ class ProduitController extends Controller
         $produitID = DB::table('produits')->latest()->first();
         
         
-        $laboID    = DB::table('labos')->where('user_id',Auth::user()->id)->first();
-        
+        $laboID    = DB::table('labos')->where('user_id',Auth::user()->id)
+                                            ->where('hasmagasin',true)->first();
+        if($laboID==null){
+            dd(" votre enregistrement n est pas comple ");
+        }
+
         $magasinID = DB::table('magasins')->where('labo_id',$laboID->id)->first();
 
       
@@ -109,7 +128,7 @@ class ProduitController extends Controller
           ]);
      
 
-      return redirect('/produit')->with('success', 'Stock has been added');
+      return redirect()->route('produit.index')->with('success', 'Stock has been added');
     
     }
 
@@ -180,7 +199,7 @@ class ProduitController extends Controller
         ])->update(['quantite' => $request->input('quantite')]);
 
     
-           redirect('/produit')->with('success', 'Stock has been updated');
+          return redirect()->route('produit.index')->with('success', 'Stock has been updated');
     }
 
     /**
@@ -194,7 +213,7 @@ class ProduitController extends Controller
         $produit = Produit::find($id);
         $produit->delete();
 
-      redirect('/produit')->with('success', 'Stock has been deleted Successfully');
+     return redirect()->route('produit.index')->with('success', 'Stock has been deleted Successfully');
       
     }
 }

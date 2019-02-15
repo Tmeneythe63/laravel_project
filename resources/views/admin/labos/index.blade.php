@@ -1,9 +1,20 @@
 @extends('layouts.master')
 
 @section('content')
+<!-- Content Header (Page header) -->
+<section class="content-header">
+      <h1>
+        Labos
+        
+      </h1>
+      
+</section>
+<br>
 <div class="container">
 
         <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-body">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
                   <tr>  
@@ -18,7 +29,8 @@
                                                      
                             <td>
                                 <a href="{{route('labos.edit',$labo->id)}}">Modiffier</a>
-                               
+                            </td>
+                            <td>
                                 <form action="{{route('labos.destroy',$labo->id)}}" method="post">
                                 {{csrf_field()}}
                                 {{method_field('DELETE')}}
@@ -35,7 +47,8 @@
             
                     
                    
-            
+          </div>  
+          </div>
             
             
 

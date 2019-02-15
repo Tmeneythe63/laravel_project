@@ -31,7 +31,8 @@ class MagasinController extends Controller
      */
     public function create()
     {
-        return view("admin.magasins.create")->with('labos',Labo::all());
+        $labo = Labo::where('hasmagasin',false)->get();
+        return view("admin.magasins.create")->with('labos',$labo);
     }
 
     /**
@@ -43,7 +44,7 @@ class MagasinController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'magasinName' => 'required',
+            'magasinName' => 'required|max:255|unique:magasins',
             'labo_id' => 'required'
         
       ]);
@@ -55,6 +56,11 @@ class MagasinController extends Controller
       ]);
       
       $magasin->save();
+
+      Labo::where('id', $request->input('labo_id'))          
+                         ->update(['hasmagasin' => true]);
+
+     return redirect()->route('magasins.index')->with('success', 'Magasin has been added Successfully');
     }
 
     /**
@@ -92,7 +98,7 @@ class MagasinController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'magasinName' => 'required',
+            'magasinName' => 'required|max:255|unique:magasins',
             'labo_id'     => 'required'
             
       ]);
@@ -102,8 +108,8 @@ class MagasinController extends Controller
           $magasin->labo_id = $request->input('labo_id');
                  
           $magasin->save();
-                   
-           redirect('/magasins')->with('success', 'Magasin has been updated');
+         
+         return  redirect()->route('magasins.index')->with('success', 'Magasin has been updated');
     
     }
 

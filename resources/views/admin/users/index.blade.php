@@ -1,9 +1,22 @@
 @extends('layouts.master')
 
 @section('content')
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+      <h1>
+        List des Utilisateurs
+        
+      </h1>
+      
+</section>
+<br>
+
 <div class="container">
 
         <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-body">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
                   <tr>  
@@ -22,10 +35,10 @@
                                 @if($user->aproved)
                                     Aproved
                                 @else
-                                <a href="{{route('users.edit',$user->id)}}">Aprove</a>
+                                <a href="{{route('users.aprove',$user->id)}}">Aprove</a>
                                 @endif
-                                
-                                
+                            </td>
+                            <td>
                                
                                 <form action="{{route('users.destroy',$user->id)}}" method="post">
                                 {{csrf_field()}}
@@ -44,7 +57,8 @@
                     
                    
             
-            
+           </div>
+           </div> 
             
 
         </div>

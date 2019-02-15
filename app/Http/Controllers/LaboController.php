@@ -30,7 +30,9 @@ class LaboController extends Controller
      */
     public function create()
     {
-        return view("admin.labos.create")->with('users',User::all());
+        $user=User::where('admin',false)->where('haslabo',false)->get();
+        
+        return view("admin.labos.create")->with('users',$user);
     }
 
     /**
@@ -42,7 +44,7 @@ class LaboController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'laboName' => 'required',
+            'laboName' => 'required|max:255|unique:labos',
             'user_id' => 'required'
         
       ]);
@@ -52,8 +54,16 @@ class LaboController extends Controller
         'user_id'=>$request->input('user_id')
        
       ]);
+
       
       $labo->save();
+
+      User::where('id', $request->input('user_id'))          
+                    ->update(['haslabo' => true]);
+
+
+      return redirect()->route("labos.index")->with('success', 'Labo has been added');
+
     }
 
     /**
@@ -91,7 +101,7 @@ class LaboController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'laboName' => 'required',
+            'laboName' => 'required|max:255|unique:labos',
             'user_id'     => 'required'
             
       ]);
@@ -101,8 +111,8 @@ class LaboController extends Controller
           $labo->user_id = $request->input('user_id');
                  
           $labo->save();
-                   
-           redirect('/labos')->with('success', 'labo has been updated');
+  
+          return redirect()->route("labos.index")->with('success', 'labo has been updated');
     
     }
 
@@ -117,7 +127,7 @@ class LaboController extends Controller
         $labo = Labo::find($id);
         $labo->delete();
 
-      redirect('/labos')->with('success', 'Labo has been deleted Successfully');
+        return redirect()->route("labos.index")->with('success', 'Labo has been deleted Successfully');
      
     }
 }

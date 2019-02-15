@@ -18,6 +18,10 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('admin'),
             'admin'  => true
         ]);
+        DB::table('profiles')->insert([           
+            'user_id' =>1,
+            
+        ]);
         DB::table('produits')->insert([
             'produitName' =>'test',
             'formuleChimique' =>'test',
@@ -26,16 +30,6 @@ class UsersTableSeeder extends Seeder
             'user_id'=>1,
             'category_id'=>1
         ]);
-        DB::table('labos')->insert([
-            'laboName' =>'labo1',
-            'user_id' =>2
-        ]);
-        DB::table('magasins')->insert([
-            'magasinName' =>'magasin1',
-            'labo_id' =>1
-        ]);
-        DB::table('categories')->insert([
-            'categoryName' =>'category1'
-        ]);
+       
     }
 }

@@ -1,42 +1,62 @@
 @extends('layouts.master')
 
 @section('content')
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+      <h1>
+        Anonces 
+        
+      </h1>
+      
+</section>
+<br>
+
 <div class="container">
 
         
-    
+<div class="panel panel-default">
+          <div class="panel-body">
         <div class="row">
         
-        
-            <div class="col-sm-6">
-                <input type="text" class="form-control" id="quantite" placeholder="ref ,Nom...">
+          <form class="form-horizontal" role="form" action="/offre" method="GET">
+            
+            
+                <div class="col-sm-3">
+                <select class="form-control" name="searchProduit" >
+                <option></option>
+                @foreach($all_produits as $all_produit)
+                <option value="{{$all_produit->id}}">{{$all_produit->produitName}}</option>
+                @endforeach
+                </select>
             </div>
-       
         
-            <div class="col-sm-2">
-                <select class="form-control" >
-                    <option>1</option>
-                    <option>2</option>
+            <div class="col-sm-3">
+                <select class="form-control" name="searchTypeOffre" >
+                <option></option>
+                    <option>Offre</option>
+                    <option>Demande</option>
                     
                 </select>
             </div>
        
 
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 
-                <select class="form-control" id="refProduit">
-                    <option>Type Enoncer</option>
-                    <option>2</option>
+                <select class="form-control" name="searchTypeEnonce" >
+                        <option></option>
+                        <option>Changement</option>
+                        <option>Don</option>
                     
                 </select>
             </div>
         
         
-            <div class="col-sm-2">
-               <button class="btn btn-default">Chercher</button>
+            <div class="col-sm-3">
+               <button type="submit" class="btn btn-default">Chercher</button>
             </div>
         
-
+            </form>
         </div>
         <hr>
         <br>
@@ -48,7 +68,9 @@
             <div class="col-sm-3">
              <div class="panel panel-default">
                 <div class="panel-body">
-                    <div>
+                  <div class="block-single-offre" >
+                    
+                    <div class="">
                     <img src="{{asset($offre->image)}}" width="150px" heigth="150px"/>
                     </div>
                     <b>Id :</b>{{$offre->id}}<br>
@@ -58,7 +80,7 @@
                     <b>Description :</b>{{$offre->description}}
                         <hr>
                     <a href="{{route('offre.reponse',$offre->id)}}" class="btn btn-info"> Reponse</a>
-                    
+                   </div> 
                 </div>
              </div>
             </div>
@@ -67,9 +89,11 @@
             
             
         </div>
-        {{ $offres->links() }}
+      
+        {{ $offres->appends(request()->query())->links()  }}
     
-    
+    </div>
+    </div>
 
 
 </div>

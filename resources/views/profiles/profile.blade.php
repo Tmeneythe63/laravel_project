@@ -4,17 +4,16 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
       <h1>
-        Magasins / Creation
+        Utilisateurs / Modiffier un Profile
         
       </h1>
       
 </section>
 <br>
 <div class="container">
-
 <div class="row">
     <div class="panel panel-default">
-    <div class="panel-heading">Creation  de Magasin</div>
+    
     <div class="panel-body">
     @if ($errors->any())
       <div class="alert alert-danger">
@@ -25,28 +24,33 @@
         </ul>
       </div><br />
     @endif
-    <form class="form-horizontal" role="form" action="/magasins" method="POST">
+    
+      
+    
+    
+        @if($user->profile)
+
+        <form class="form-horizontal" role="form" action="{{route('profile.update')}}" method="POST" enctype="multipart/form-data">
     {{csrf_field()}}
     
-    
-    
+    <div class="form-group">
+            
+       
         <div class="form-group">
-            <label class="control-label col-sm-2" for="magasinName">Magasin Name:</label>
+            <label class="control-label col-sm-2" for="about">About:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" name="magasinName" id="magasinName" placeholder="Enter magasinName">
-            </div>
-        </div> 
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="labo_id">Labos:</label>
-            <div class="col-sm-10">
-                <select class="form-control" name="labo_id" id="labo_id">
-                @foreach($labos as $labo)
-                    <option value="{{$labo->id}}">{{$labo->laboName}}</option>
-                @endforeach
-                </select>
+                <input type="text" value="{{$user->profile->about}}"  name="about" class="form-control" id="about">
             </div>
         </div>
-       
+    
+        
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="avatar">Selectioner Image:</label>
+            <div class="col-sm-10">
+                <input type="file" name="avatar" class="form-control-file" id="avatar" >
+            </div>
+        </div>
+
 
         <div class="form-group">
         <div class="col-sm-offset-10 col-sm-2 ">
@@ -54,6 +58,11 @@
         </div>
         </div>
     </form>
+
+        @else
+
+        @endif
+
     </div>
     </div>
 

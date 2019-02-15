@@ -133,7 +133,7 @@
                         <!-- Authentication Links -->
                         @guest
                             <li><a href="{{ route('login') }}">Seconnecter</a></li>
-                            <!-- <li><a href="{{ route('register') }}">Register</a></li> -->
+                             <li><a href="{{ route('register') }}">Register</a></li> 
                         @else
                                                
                             <li class="dropdown">

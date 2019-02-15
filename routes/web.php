@@ -39,8 +39,12 @@ Route::get('/offres/confirmresponseechange{respid}', 'OffreController@confirmres
 Route::resource('/produit', 'ProduitController');
 Route::resource('/categories', 'CategoryController');
 Route::resource('/users', 'UserController');
+Route::get('/users/aprove/{user_id}', 'UserController@aprove')->name('users.aprove');
+Route::get('/profiles', 'ProfileController@index')->name('profile.index');
+Route::post('/profiles/update', 'ProfileController@update')->name('profile.update');
 Route::resource('/magasins', 'MagasinController');
 Route::resource('/labos', 'LaboController');
+
 
 
 Route::group(['prefix'=>'admin'],function(){

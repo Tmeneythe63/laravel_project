@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Offre;
+use App\Produit;
 use App\Magasin;
 use App\ResponseEchange;
 use App\ResponseDon;
@@ -20,11 +21,20 @@ class OffreController extends Controller
     {
         $this->middleware('auth');
     }
-    public function index()
+    public function index(Request $request)
     {
-        $offres=Offre::paginate(6);
-        
-        return view("offre.index",['offres' => $offres]);
+        $all_produits = Produit::where('id','>',1)->where('user_id','!=',Auth::user()->id)->get();
+        $offres=Offre::where('user_id','!=',Auth::user()->id)->where('confirm',false)->when($request->searchProduitName,function($query1) use ($request){
+                                return $query1->where('produit_id','like','%'.$request->searchProduitName. '%' );
+                              })
+                            ->when($request->searchTypeOffre,function($query2) use ($request){
+                                return $query2->where('typeOffre','like','%'.$request->searchTypeOffre. '%' );
+                              })
+                            ->when($request->searchTypeEnonce,function($query3) use ($request){
+                                return $query3->where('typeEnonce','like','%'.$request->searchTypeEnonce. '%' );
+                              })->paginate(2);
+
+        return view("offre.index",['offres' => $offres,'all_produits'=>$all_produits]);
     }
 
     /**
@@ -34,15 +44,17 @@ class OffreController extends Controller
      */
     public function create()
     {
-        $laboID    = DB::table('labos')->where('user_id',Auth::user()->id)->first();
+        $laboID    = DB::table('labos')->where('user_id',Auth::user()->id)
+                                                    ->where('hasmagasin',true)->first();
         if($laboID==null){
             dd(" votre enregistrement n est pas comple");
         }
         $magasinID = DB::table('magasins') ->where('labo_id',$laboID->id)->first();
 
         // pour selectionner les produits de l utilisateur
-        $laboID = DB::table('labos')->where('user_id',Auth::user()->id)->first();;     
-       $produits=Magasin::where('labo_id',$laboID->id)->first()->produits; 
+       // $laboID = DB::table('labos')->where('user_id',Auth::user()->id)->first();;     
+       //$produits=Magasin::where('labo_id',$laboID->id)->first()->produits; 
+       $produits=Produit::where('user_id',Auth::user()->id)->get();
 
         return view("offre.create")
                                    ->with('magasinID',$magasinID)
@@ -91,7 +103,7 @@ class OffreController extends Controller
            $produitMagasin =  DB::update('update  magasin_produit set quantite = quantite-? where produit_id=? and magasin_id=? ', 
              [$request->input('quantite'),$request->input('produit_id'),$request->input('magasinID')] );
 
-          return redirect('/offre')->with('success', 'Stock has been added');
+          return redirect()->route('offre.index')->with('success', 'Stock has been added');
         
 
 
@@ -165,7 +177,7 @@ class OffreController extends Controller
     
           $offre->save();
     
-           redirect('/offre')->with('success', 'Stock has been updated');
+           return  redirect()->route('offre.index')->with('success', 'Stock has been updated');
   
         }
 
@@ -180,7 +192,7 @@ class OffreController extends Controller
         $offre = Offre::find($id);
         $offre->delete();
 
-      redirect('/offre')->with('success', 'Stock has been deleted Successfully');
+      redirect()->route('offre.index')->with('success', 'Stock has been deleted Successfully');
       
     }
 
@@ -191,15 +203,25 @@ class OffreController extends Controller
      * @param  int  $publisher_id
      * @return \Illuminate\Http\Response
      */
-    public function showoffre($userid)
+    public function showoffre(Request $request,$userid)
     {
          // $offrespulisher = DB::select('select * from offres where user_id = ?', [$userid]);
-         $offrespulisher = Offre::where('user_id',$userid)->paginate(5); 
-         
+         //$offrespulisher = Offre::where('user_id',$userid)->paginate(5); 
+         $produits = Produit::where('user_id',Auth::user()->id)->get();
+
+         $offrespulisher = Offre::where('user_id',$userid)->where('confirm',false)->when($request->searchProduitName,function($query1) use ($request){
+            return $query1->where('produit_id','like','%'.$request->searchProduitName. '%' );
+          })
+        ->when($request->searchTypeOffre,function($query2) use ($request){
+            return $query2->where('typeOffre','like','%'.$request->searchTypeOffre. '%' );
+          })
+        ->when($request->searchTypeEnonce,function($query3) use ($request){
+            return $query3->where('typeEnonce','like','%'.$request->searchTypeEnonce. '%' );
+          })->paginate(2);
          
          
        // $offrespulisher=Offre::find($userid);
-        return view ("offre.showoffre", ['offrespulisher' => $offrespulisher]);
+        return view ("offre.showoffre", ['offrespulisher' => $offrespulisher,'produits'=>$produits]);
     }
     public function showoffredetails($offreid)
     {
@@ -215,12 +237,17 @@ class OffreController extends Controller
      */
     public function reponse($id)
     {
+            // pour selectionner les produits de l utilisateur
+               // $laboID = DB::table('labos')->where('user_id',Auth::user()->id)->first();;     
+                //$produits=Magasin::where('labo_id',$laboID->id)->first()->produits;
+                $produits=Produit::where('user_id',Auth::user()->id)->get();
+
         $offre=Offre::find($id);
         if($offre->typeEnonce == "Don"){
 
             return view ("offre.don")->with('offre',$offre);
         }else{
-            return view ("offre.echange")->with('offre',$offre);
+            return view ("offre.echange")->with('offre',$offre)->with('produits',$produits);
         }
              
     }
@@ -251,7 +278,7 @@ class OffreController extends Controller
       ]);
     
          
-        return redirect('/offre')->with('success', 'Reponse has been added');
+        return redirect()->route('offre.index')->with('success', 'Reponse has been added');
     }
 
     /**
@@ -274,7 +301,7 @@ class OffreController extends Controller
         'offre_id'=>$request->input('offre_id')             
       ]);
          
-        return redirect('/offre')->with('success', 'Reponse has been added');
+        return redirect()->route('offre.index')->with('success', 'Reponse has been added');
     }
 
     
@@ -285,6 +312,7 @@ class OffreController extends Controller
 
         $offre_id = $resp->offre_id;
         $user_id_resp = $resp->user_id;
+        //
         $laboIDresp    = DB::table('labos')->where('user_id',$user_id_resp)->first();
         $magasinIDresp = DB::table('magasins')->where('labo_id',$laboIDresp->id)->first()->id;
 
@@ -294,15 +322,19 @@ class OffreController extends Controller
         $produit_id_offre = $offre->produit_id;
         $user_id_offre = $offre->user_id;
         $quantite_offre = $offre->quantite;
+        //
         $laboIDoffre    = DB::table('labos')->where('user_id',$user_id_offre)->first();
         $magasinIDoffre = DB::table('magasins')->where('labo_id',$laboIDoffre->id)->first()->id;
 
+        Offre::where('id', $offre_id)          
+                    ->update(['confirm' => true]);
+        // 
         DB::table('magasin_produit')->insert([        
             'produit_id'=>$produit_id_offre ,
             'magasin_id'=>$magasinIDresp,
             'quantite'=>$quantite_offre            
           ]);
-
+        //
         DB::update('update  magasin_produit set quantite = quantite-? where produit_id=? and magasin_id=? ', 
              [$quantite_offre,$produit_id_offre,$magasinIDoffre] );
 
@@ -326,7 +358,11 @@ class OffreController extends Controller
         $quantite_offre = $offre->quantite;
         $laboIDoffre    = DB::table('labos')->where('user_id',$offre->user_id)->first();
         $magasinIDoffre = DB::table('magasins')->where('labo_id',$laboIDoffre->id)->first()->id;
-        //etap1
+       
+        //
+        Offre::where('id', $offre_id)          
+                    ->update(['confirm' => true]);
+        //
         DB::table('magasin_produit')->insert([        
             'produit_id'=>$produit_id_offre ,
             'magasin_id'=>$magasinIDresp,
@@ -336,7 +372,7 @@ class OffreController extends Controller
         DB::update('update  magasin_produit set quantite = quantite-? where produit_id=? and magasin_id=? ', 
              [$quantite_offre,$produit_id_offre,$magasinIDoffre] );
 
-        //etap2
+        //
         DB::table('magasin_produit')->insert([        
             'produit_id'=>$produit_id_echange ,
             'magasin_id'=>$magasinIDoffre,
