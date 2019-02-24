@@ -73,7 +73,7 @@
                     <div class="">
                     <img src="{{asset($offre->image)}}" width="150px" heigth="150px"/>
                     </div>
-                    <b>Id :</b>{{$offre->id}}<br>
+                    
                     <b>Quanrite :</b>{{$offre->quantite}}<br>
                     <b>TypeOffre :</b>{{$offre->typeOffre}}<br>
                     <b>TypeEnonce :</b>{{$offre->typeEnonce}}<br>

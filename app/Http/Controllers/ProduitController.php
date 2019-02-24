@@ -45,7 +45,7 @@ class ProduitController extends Controller
                               })
                             ->when($request->search,function($query3) use ($request){
                                 return $query3->where('formuleChimique','like','%'.$request->search. '%' );
-                              })->paginate(2); 
+                              })->paginate(8); 
         
     // $produits=Magasin::where('labo_id',$laboID->id)->first()->produits();
             

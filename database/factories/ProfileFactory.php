@@ -1,5 +1,7 @@
 <?php
 
+use App\User;
+use App\Category;
 use Faker\Generator as Faker;
 
 /*
@@ -13,11 +15,10 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\User::class, function (Faker $faker) {
+$factory->define(App\Profile::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => bcrypt('123456'), // 123456
-        'remember_token' => str_random(10),
-    ];
+        'user_id'=> function(){
+            return User::all()->random();
+        }  ,
+  ];
 });

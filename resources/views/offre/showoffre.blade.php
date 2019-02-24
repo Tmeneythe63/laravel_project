@@ -68,7 +68,7 @@
                <div class="panel-body">
                     <img src="{{asset($off->image)}}" width="100px" heigth="100px"/>
                    <div>
-                           {{$off->id}} 
+                           
                             {{$off->quantite}}
                             {{$off->description}}
                             {{$off->typeOffre}}

@@ -22,6 +22,71 @@ class UsersTableSeeder extends Seeder
             'user_id' =>1,
             
         ]);
+        //2
+        DB::table('users')->insert([
+            'name' =>'user1',
+            'email' =>'user1@gmail.com',
+            'password' => bcrypt('123456')
+        ]);
+        DB::table('profiles')->insert([           
+            'user_id' =>2,
+            
+        ]);
+        //3
+        DB::table('users')->insert([
+            'name' =>'user2',
+            'email' =>'user2@gmail.com',
+            'password' => bcrypt('123456')
+        ]);
+        DB::table('profiles')->insert([           
+            'user_id' =>3,
+            
+        ]);
+        //4
+        DB::table('users')->insert([
+            'name' =>'user3',
+            'email' =>'user3@gmail.com',
+            'password' => bcrypt('123456')
+        ]);
+        DB::table('profiles')->insert([           
+            'user_id' =>4,
+            
+        ]);
+
+        //5
+        DB::table('users')->insert([
+            'name' =>'user4',
+            'email' =>'user4@gmail.com',
+            'password' => bcrypt('123456')
+        ]);
+        DB::table('profiles')->insert([           
+            'user_id' =>5,
+            
+        ]);
+        //6
+        DB::table('users')->insert([
+            'name' =>'user5',
+            'email' =>'user5@gmail.com',
+            'password' => bcrypt('123456')
+        ]);
+        DB::table('profiles')->insert([           
+            'user_id' =>6,
+            
+        ]);
+        //7
+        DB::table('users')->insert([
+            'name' =>'user6',
+            'email' =>'user6@gmail.com',
+            'password' => bcrypt('123456')
+        ]);
+        DB::table('profiles')->insert([           
+            'user_id' =>7,
+            
+        ]);
+
+
+
+
         DB::table('produits')->insert([
             'produitName' =>'test',
             'formuleChimique' =>'test',

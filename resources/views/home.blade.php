@@ -12,26 +12,40 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        
             <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
+                
 
                 <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+                @guest
+                           <!--  <li><a href="{{ route('login') }}">Login</a></li>
+                            <li><a href="{{ route('register') }}">Register</a></li>
+                       -->
+                       
+                @else
+    
+                    @if(Auth::user()->admin)
+                        <!--  Tableau de bore pour l'admin -->
 
-                    You are logged in!
+                        <h1>Bienvenu l'admin  <b>{{Auth::user()->name}}</b></h1>
 
+                        <!-- Fin Tableau de bore pour l'admin -->
+                    @else
+                   
+
+                        <!--  Tableau de bore pour l'utilisateur non admin -->
+                        
+                            <h1>Bienvenu l'utilisateur  <b>{{Auth::user()->name}}</b></h1>
+
+                        <!-- Fin Tableau de bore pour l'utilisateur non admin -->
                     
-
-
+                    @endif
+         
+                 @endguest
                         
                     
                 </div>
-            </div>
+            
         </div>
     </div>
 </div>

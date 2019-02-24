@@ -1,5 +1,8 @@
 <?php
 
+use App\Labo;
+use App\User;
+use App\Category;
 use Faker\Generator as Faker;
 
 /*
@@ -13,11 +16,11 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\User::class, function (Faker $faker) {
+$factory->define(App\Magasin::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => bcrypt('123456'), // 123456
-        'remember_token' => str_random(10),
-    ];
+        'magasinName' => $faker->unique()->name,
+        'labo_id'=> function(){
+            return Labo::all()->random();
+        }  ,
+  ];
 });

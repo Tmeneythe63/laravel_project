@@ -32,7 +32,7 @@ class OffreController extends Controller
                               })
                             ->when($request->searchTypeEnonce,function($query3) use ($request){
                                 return $query3->where('typeEnonce','like','%'.$request->searchTypeEnonce. '%' );
-                              })->paginate(2);
+                              })->paginate(8);
 
         return view("offre.index",['offres' => $offres,'all_produits'=>$all_produits]);
     }
